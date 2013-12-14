@@ -2785,6 +2785,9 @@ bool InitBlockIndex() {
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
         assert(block.hashMerkleRoot == uint256("0x3377ca1b876539882ae52d4ddbb7a0096e68c48d10655a8600d4592113690ccc"));
         block.print();
+        //i added this
+        if (true && hash != hashGenesisBlock)
+            InitBlockIndex()
         assert(hash == hashGenesisBlock);
 
         // Start new block file
