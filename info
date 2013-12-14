@@ -1,0 +1,22 @@
+port: 
+9332 rpc 41776, 
+9333 p2p 41777
+19333 testnet 41778
+
+10 coin per block
+    int64 nSubsidy = 10 * COIN;
+
+    // Subsidy is cut in half every 840000 blocks, which will occur approximately every 4 years
+    nSubsidy >>= (nHeight / 420000); // BETCoin: 420k blocks in ~4 years
+
+    return nSubsidy + nFees;
+}
+
+static const int64 nTargetTimespan = 3.5 * 24 * 60 * 60; // BETCoin: 3.5 days
+static const int64 nTargetSpacing = 5.0 * 60; // BETCoin: 5.0 minutes
+
+static const int64 MAX_MONEY = 42000000 * COIN;
+ return dPriority > COIN * 576 / 250;
+
+PUBKEY_ADDRESS = 26, // BETCoin addresses start with T
+

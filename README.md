@@ -1,10 +1,11 @@
 BETCoin integration/staging tree
 ================================
 
-http://www.betcoin.org
+http://needasite
 
 Copyright (c) 2009-2013 Bitcoin Developers
-Copyright (c) 2011-2013 BETCoin Developers
+Copyright (c) 2011-2013 Litecoin Developers
+Copyright (c) 2013-2013 BETCoin Developers
 
 What is BETCoin?
 ----------------
