@@ -2777,7 +2777,21 @@ bool InitBlockIndex() {
             block.nTime    = 1387051749;
             block.nNonce   = 2084524493;
         }
-
+        if (true  && (block.GetHash() != hashGenesisBlock)) {
+         
+            // This will figure out a valid hash and Nonce if you're
+            // creating a different genesis block:
+                uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
+                while (block.GetHash() > hashTarget)
+                    {
+                        ++block.nNonce;
+                        if (block.nNonce == 0)
+                        {
+                            printf("NONCE WRAPPED, incrementing time");
+                            ++block.nTime;
+                        }
+                    }
+        }
         //// debug print
         uint256 hash = block.GetHash();
         printf("%s\n", hash.ToString().c_str());
@@ -2785,21 +2799,6 @@ bool InitBlockIndex() {
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
         assert(block.hashMerkleRoot == uint256("0x3377ca1b876539882ae52d4ddbb7a0096e68c48d10655a8600d4592113690ccc"));
         block.print();
-           if (true  && (block.GetHash() != hashGenesisBlock)) {
-         
-                // This will figure out a valid hash and Nonce if you're
-                // creating a different genesis block:
-                    uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
-                    while (block.GetHash() > hashTarget)
-                       {
-                           ++block.nNonce;
-                           if (block.nNonce == 0)
-                           {
-                               printf("NONCE WRAPPED, incrementing time");
-                               ++block.nTime;
-                           }
-                       }
-        }
         assert(hash == hashGenesisBlock);
 
         // Start new block file
