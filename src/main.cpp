@@ -31,7 +31,7 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0x5bccc0ad9c6e2eae5f0180e00d838f68c54dcd67bb746bae62dc837a48c45f9a");
+uint256 hashGenesisBlock("hash");
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // BETCoin: starting difficulty is 1 / 2^12
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -2723,7 +2723,7 @@ bool LoadBlockIndex()
         pchMessageStart[1] = 0xc1;
         pchMessageStart[2] = 0xb7;
         pchMessageStart[3] = 0xdc;
-        hashGenesisBlock = uint256("0x12a765e31ffd4059bada1e25190f6e98c99d9714d334efa41a195a7e7e04bfe2");
+        hashGenesisBlock = uint256("0x00000c034417d1d462314875b9d057e8fc824b113f0d2c0adf52b76aaa80daf6");
     }
 
     //
@@ -2770,15 +2770,14 @@ bool InitBlockIndex() {
         block.nVersion = 1;
         block.nTime    = 1387051749;
         block.nBits    = 0x1e0ffff0;
-        block.nNonce   = 0;
+        block.nNonce   = 1843519;
 
         if (fTestNet)
         {
             block.nTime    = 1387051749;
-            block.nNonce   = 2084524493;
+            block.nNonce   = 1843519;
         }
-        if (true  && (block.GetHash() != hashGenesisBlock)) {
-         
+        if (true && block.GetHash() != hashGenesisBlock) {
             // This will figure out a valid hash and Nonce if you're
             // creating a different genesis block:
                 uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
@@ -2792,6 +2791,13 @@ bool InitBlockIndex() {
                         }
                     }
         }
+        //// debug print
+        printf("block.nTime = %u \n", block.nTime);
+        printf("block.nNonce = %u \n", block.nNonce);
+        printf("block.GetHash = %s\n", block.GetHash().ToString().c_str());
+        printf("hashGenesisBlock = %s\n", hashGenesisBlock.ToString().c_str());
+        printf("block.hashMerkleRoot = %s\n", block.hashMerkleRoot.ToString().c_str());
+        printf("It listened\n"); //mine
         //// debug print
         uint256 hash = block.GetHash();
         printf("%s\n", hash.ToString().c_str());
