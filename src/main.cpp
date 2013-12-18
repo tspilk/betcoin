@@ -31,7 +31,7 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0x12a765e31ffd4059bada1e25190f6e98c99d9714d334efa41a195a7e7e04bfe2");
+uint256 hashGenesisBlock("0x806108e1d3f5604a08a83b081af7ddc2529dfd0f38b5d38f436e422dad23d5d6");
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // BETCoin: starting difficulty is 1 / 2^12
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -2723,7 +2723,7 @@ bool LoadBlockIndex()
         pchMessageStart[1] = 0xc1;
         pchMessageStart[2] = 0xb7;
         pchMessageStart[3] = 0xdc;
-        hashGenesisBlock = uint256("0x12a765e31ffd4059bada1e25190f6e98c99d9714d334efa41a195a7e7e04bfe2");
+        hashGenesisBlock = uint256("0x806108e1d3f5604a08a83b081af7ddc2529dfd0f38b5d38f436e422dad23d5d6");
     }
 
     //
@@ -2770,40 +2770,52 @@ bool InitBlockIndex() {
         block.nVersion = 1;
         block.nTime    = 1387051749;
         block.nBits    = 0x1e0ffff0;
-        block.nNonce   = 0;
+        block.nNonce   = 2084524493;
 
         if (fTestNet)
         {
             block.nTime    = 1387051749;
-            block.nNonce   = 0;
+            block.nNonce   = 385597498;
         }
-        if (true && block.GetHash() != hashGenesisBlock) {
-            // This will figure out a valid hash and Nonce if you're
-            // creating a different genesis block:
-                uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
-                while (block.GetHash() > hashTarget)
-                    {
-                        ++block.nNonce;
-                        if (block.nNonce == 0)
-                        {
-                            printf("NONCE WRAPPED, incrementing time");
-                            ++block.nTime;
-                        }
-                    }
-        }
-        //// debug print
-        printf("block.nTime = %u \n", block.nTime);
-        printf("block.nNonce = %u \n", block.nNonce);
-        printf("block.GetHash = %s\n", block.GetHash().ToString().c_str());
-        printf("hashGenesisBlock = %s\n", hashGenesisBlock.ToString().c_str());
-        printf("block.hashMerkleRoot = %s\n", block.hashMerkleRoot.ToString().c_str());
-        printf("It listened\n"); //mine
+
         //// debug print
         uint256 hash = block.GetHash();
         printf("%s\n", hash.ToString().c_str());
         printf("%s\n", hashGenesisBlock.ToString().c_str());
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
         assert(block.hashMerkleRoot == uint256("0x3377ca1b876539882ae52d4ddbb7a0096e68c48d10655a8600d4592113690ccc"));
+        
+        // Find a Genesis block if it doesnt match
+        if (false && block.GetHash() != hashGenesisBlock) // set it to false so no genesis is hashed (even though it wont)
+        {
+            printf("Searching for genesis block...\n");
+            // This will figure out a valid hash and Nonce if you're
+            // creating a different genesis block:
+            uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
+            uint256 thash;
+            char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
+
+            loop
+            {
+                scrypt_1024_1_1_256_sp_generic(BEGIN(block.nVersion), BEGIN(thash), scratchpad);
+                if (thash <= hashTarget)
+                    break;
+                if ((block.nNonce & 0xFFF) == 0)
+                {
+                    printf("nonce %08X: hash = %s (target = %s)\n", block.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
+                }
+                ++block.nNonce;
+                if (block.nNonce == 0)
+                {
+                    printf("NONCE WRAPPED, incrementing time\n");
+                    ++block.nTime;
+                }
+            }
+            printf("block.nTime = %u \n", block.nTime);
+            printf("block.nNonce = %u \n", block.nNonce);
+            printf("block.GetHash = %s\n", block.GetHash().ToString().c_str());
+        }
+        
         block.print();
         assert(hash == hashGenesisBlock);
 
