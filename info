@@ -18,5 +18,5 @@ static const int64 nTargetSpacing = 5.0 * 60; // BETCoin: 5.0 minutes
 static const int64 MAX_MONEY = 42000000 * COIN;
  return dPriority > COIN * 576 / 250;
 
-PUBKEY_ADDRESS = 26, // BETCoin addresses start with T
+PUBKEY_ADDRESS = 26, // BETCoin addresses start with B
 
