@@ -7,6 +7,9 @@ Copyright (c) 2009-2013 Bitcoin Developers
 Copyright (c) 2011-2013 Litecoin Developers
 Copyright (c) 2013-2013 BETCoin Developers
 
+This coin is functional yet does not automatically make connections with other members of the network. I am in the process of building seed nodes as well as other connection methods defined here : https://en.bitcoin.it/wiki/Satoshi_Client_Node_Discovery
+
+
 What is BETCoin?
 ----------------
 
